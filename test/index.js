@@ -1,15 +1,16 @@
 var expect = require("chai").expect
   , http = require("http")
-  , Promise = require("bluebird")
+  , q = require("q")
+  , Promise = q.makePromise
   , supertest = require("supertest")
-  , supertestAsPromised = require("..");
+  , qSupertest = require("..");
 
 var server = http.createServer(function (req, res) {
   res.end("helo");
 });
 
-describe("supertestAsPromised", function () {
-  var request = supertestAsPromised(server);
+describe("q-supertest", function () {
+  var request = qSupertest(server);
 
   describe("Test instances", function () {
     describe("#then", function () {
@@ -34,7 +35,7 @@ describe("supertestAsPromised", function () {
   });
 
   describe("TestAgent instances", function () {
-    var agent = supertestAsPromised.agent(server);
+    var agent = qSupertest.agent(server);
 
     describe("#then", function () {
       it("should return a promise", function () {

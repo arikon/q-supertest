@@ -1,13 +1,14 @@
 var methods = require("methods")
-  , Promise = require("bluebird")
+  , q = require("q")
   , supertest = require("supertest");
 
 // Support SuperTest's historical `del` alias for `delete`
 methods.push("del");
 
 function then(onFulfilled, onRejected) {
-  var end = Promise.promisify(this.end, this);
-  return end().then(onFulfilled, onRejected);
+  var defer = q.defer();
+  this.end.call(this, defer.makeNodeResolver());
+  return defer.promise.then(onFulfilled, onRejected);
 }
 
 // Creates a new object that wraps `factory`, where each HTTP method (`get`,
