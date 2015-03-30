@@ -3,14 +3,14 @@
     align="right" valign="top" alt="Promises/A+ logo">
 </a>
 
-# supertest-as-promised
+# q-supertest
 
-<a href="https://travis-ci.org/WhoopInc/supertest-as-promised">
-  <img src="https://travis-ci.org/WhoopInc/supertest-as-promised.svg?branch=master"
+<a href="https://travis-ci.org/arikon/q-supertest">
+  <img src="https://travis-ci.org/arikon/q-supertest.svg?branch=master"
     align="right" valign="top" alt="Build Status">
 </a>
 
-SuperTest as Promised supercharges [SuperTest] with a `then` method.
+`q-supertest` supercharges [SuperTest] with a `then` method, that returns [Q] promise.
 
 Instead of layering callbacks on callbacks in your tests:
 
@@ -51,13 +51,13 @@ return request(app)
 
 ## Usage
 
-SuperTest as Promised operates just like normal [SuperTest], except that the
+`q-supertest` operates just like normal [SuperTest], except that the
 object returned by `.get`, `.post`, etc. is a proper
 thenable:
 
 ```js
 var express = require("express")
-  , request = require("supertest-as-promised");
+  , request = require("q-supertest");
 
 var app = express();
 
@@ -86,7 +86,7 @@ describe("GET /kittens", function () {
 If you use a SuperTest agent to persist cookies, those are thenable too:
 
 ```js
-var agent = require("supertest-as-promised").agent(app);
+var agent = require("q-supertest").agent(app);
 
 agent
   .get("/ugly-kitteh")
@@ -100,7 +100,7 @@ agent
 ### Promisey goodness
 
 To start, only the `then` method is exposed. But once you've called `.then`
-once, you've got a proper [Bluebird] promise that supports the whole gamut of
+once, you've got a proper [Q] promise that supports the whole gamut of
 promisey goodness:
 
 ```js
@@ -112,33 +112,32 @@ request(app)
   .catch(function (err) { /* ... */ })
 ```
 
-See the [Bluebird API][bluebird-api] for everything that's available.
+See the [Q API][Q] for everything that's available.
 
 ## Installation
 
 ### Node
 
 ```bash
-$ npm install supertest-as-promised
+$ npm install q-supertest
 ```
 
-SuperTest as Promised lists [`supertest`][SuperTest] as a
+`q-supertest` lists [`supertest`][SuperTest] as a
 [peer dependency][peer-dependency], so it'll wrap whatever version of SuperTest
 you've asked for in your own `package.json`. If you don't specify a version of
 SuperTest, npm will use the latest.
 
-Do note that SuperTest as Promised is a well-behaved citizen and doesn't
-monkey-patch SuperTest directly:
+Do note that `q-supertest` is a well-behaved citizen and doesn't monkey-patch
+SuperTest directly:
 
 ```js
 // I return thenables!
-var request = require("supertest-as-promised");
+var request = require("q-supertest");
 
 // I'm lame and force you to use callbacks
 var request = require("supertest");
 ```
 
-[bluebird]: https://github.com/petkaantonov/bluebird
-[bluebird-api]: https://github.com/petkaantonov/bluebird/blob/master/API.md#promiseisdynamic-value---boolean
+[Q]: https://github.com/kriskowal/q
 [peer-dependency]: http://blog.nodejs.org/2013/02/07/peer-dependencies/
 [SuperTest]: https://github.com/visionmedia/supertest
