@@ -5,10 +5,12 @@ var methods = require("methods")
 // Support SuperTest's historical `del` alias for `delete`
 methods.push("del");
 
-function then(onFulfilled, onRejected) {
-  var defer = q.defer();
-  this.end.call(this, defer.makeNodeResolver());
-  return defer.promise.then(onFulfilled, onRejected);
+function createPromiseMethod(method) {
+  return function () {
+    var defer = q.defer();
+    this.end.call(this, defer.makeNodeResolver());
+    return defer.promise[method].apply(defer.promise, arguments);
+  };
 }
 
 // Creates a new object that wraps `factory`, where each HTTP method (`get`,
@@ -20,7 +22,8 @@ function wrap(factory) {
   methods.forEach(function (method) {
     out[method] = function () {
       var test = factory[method].apply(factory, arguments);
-      test.then = then;
+      test.then = createPromiseMethod("then");
+      test.catch = createPromiseMethod("catch");
       return test;
     };
   });

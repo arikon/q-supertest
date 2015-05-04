@@ -32,6 +32,10 @@ describe("q-supertest", function () {
     it("should reject if an assertion fails", function () {
       return expect(request.get("/home").expect(500)).to.eventually.be.rejected;
     });
+    
+    it("should expose catch method", function() {
+      return request.get("/home").expect(500).catch(function() {});
+    });
   });
 
   describe("TestAgent instances", function () {
